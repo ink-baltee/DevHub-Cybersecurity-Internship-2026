@@ -1,11 +1,40 @@
 const UserDAO = require("../data/user-dao").UserDAO;
 const AllocationsDAO = require("../data/allocations-dao").AllocationsDAO;
 const jwt = require("jsonwebtoken");
+const ExpressBrute = require("express-brute");
+const winston = require("winston");
 const {
     environmentalScripts,
     jwtSecret,
     jwtExpiry
 } = require("../../config/config");
+
+// Logger for intrusion detection alerts
+const logger = winston.createLogger({
+    level: "warn",
+    format: winston.format.combine(
+        winston.format.timestamp(),
+        winston.format.printf(({ timestamp, level, message }) => {
+            return `${timestamp} [${level.toUpperCase()}]: ${message}`;
+        })
+    ),
+    transports: [
+        new winston.transports.Console(),
+        new winston.transports.File({ filename: "security.log" })
+    ]
+});
+
+// Brute force protection store
+const store = new ExpressBrute.MemoryStore();
+const bruteforce = new ExpressBrute(store, {
+    freeRetries: 3,
+    minWait: 5 * 60 * 1000,
+    maxWait: 60 * 60 * 1000,
+    onBlocked: (req, res, next, nextValidRequestDate) => {
+        logger.warn(`INTRUSION ALERT: IP ${req.ip} blocked after multiple failed login attempts. Next valid request: ${nextValidRequestDate}`);
+        res.status(429).send("Too many failed login attempts. Your IP has been temporarily blocked. Please try again later.");
+    }
+});
 
 /* The SessionHandler must be constructed with a connected db */
 function SessionHandler(db) {
@@ -64,7 +93,7 @@ function SessionHandler(db) {
             const invalidPasswordErrorMessage = "Invalid password";
             if (err) {
                 if (err.noSuchUser) {
-                    console.log("Error: attempt to login with invalid user: ", userName);
+                    logger.warn(`Failed login attempt - Invalid username: ${userName} - IP: ${req.ip}`);
 
                     // Fix for A1 - 3 Log Injection - encode/sanitize input for CRLF Injection
                     // that could result in log forging:
@@ -91,6 +120,7 @@ function SessionHandler(db) {
                         environmentalScripts
                     });
                 } else if (err.invalidPassword) {
+                    logger.warn(`Failed login attempt - Invalid password for user: ${userName} - IP: ${req.ip}`);
                     return res.render("login", {
                         userName: userName,
                         password: "",
@@ -280,3 +310,4 @@ function SessionHandler(db) {
 }
 
 module.exports = SessionHandler;
+module.exports.bruteforce = bruteforce;

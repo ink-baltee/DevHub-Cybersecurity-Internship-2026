@@ -47,3 +47,48 @@
 2026-05-15T03:16:37.383Z [INFO]: Request: GET /logout
 2026-05-15T03:16:37.425Z [INFO]: Request: GET /
 2026-05-15T03:16:37.450Z [INFO]: Request: GET /login
+2026-06-04T19:24:17.724Z [INFO]: Request: GET /
+2026-06-04T19:24:17.751Z [INFO]: Request: GET /login
+2026-06-04T19:24:42.117Z [INFO]: Request: POST /login
+2026-06-04T19:24:50.363Z [INFO]: Request: POST /login
+2026-06-04T19:25:37.216Z [INFO]: Request: POST /login
+2026-06-04T19:26:04.425Z [INFO]: Request: POST /login
+2026-06-04T19:26:28.357Z [INFO]: Request: POST /login
+2026-06-04T19:26:45.838Z [INFO]: Request: POST /login
+2026-06-04T19:27:53.150Z [INFO]: Request: GET /signup
+2026-06-04T19:28:44.603Z [INFO]: Request: POST /signup
+2026-06-04T20:20:48.715Z [INFO]: Request: POST /signup
+2026-06-04T20:20:52.654Z [INFO]: Request: GET /login
+2026-06-04T20:21:01.697Z [INFO]: Request: POST /login
+2026-06-04T20:21:01.779Z [WARN]: Failed login attempt - Invalid password for user: testuser - IP: ::1
+2026-06-04T20:21:04.781Z [INFO]: Request: POST /login
+2026-06-04T20:21:04.870Z [WARN]: Failed login attempt - Invalid password for user: testuser - IP: ::1
+2026-06-04T20:21:07.713Z [INFO]: Request: POST /login
+2026-06-04T20:21:07.796Z [WARN]: Failed login attempt - Invalid password for user: testuser - IP: ::1
+2026-06-04T20:21:11.655Z [INFO]: Request: POST /login
+2026-06-04T20:21:11.740Z [WARN]: Failed login attempt - Invalid password for user: testuser - IP: ::1
+2026-06-04T20:21:17.891Z [INFO]: Request: POST /login
+2026-06-06T10:36:32.489Z [INFO]: Request: GET /
+2026-06-06T10:36:32.535Z [INFO]: Request: GET /login
+2026-06-06T10:42:22.180Z [INFO]: Request: POST /login
+2026-06-06T10:42:22.375Z [INFO]: Request: GET /dashboard
+2026-06-06T10:42:41.921Z [INFO]: Request: GET /.well-known/appspecific/com.chrome.devtools.json
+2026-06-06T10:43:20.422Z [INFO]: Request: GET /allocations/4
+2026-06-06T10:43:20.424Z [WARN]: Unauthorized API access attempt - IP: ::1
+2026-06-06T10:43:20.606Z [INFO]: Request: GET /.well-known/appspecific/com.chrome.devtools.json
+2026-06-06T10:43:44.516Z [INFO]: Request: GET /allocations/1
+2026-06-06T10:43:44.517Z [WARN]: Unauthorized API access attempt - IP: ::1
+2026-06-06T10:43:44.656Z [INFO]: Request: GET /.well-known/appspecific/com.chrome.devtools.json
+2026-06-06T10:44:16.402Z [INFO]: Request: GET /allocations/4
+2026-06-06T10:44:16.403Z [WARN]: Unauthorized API access attempt - IP: ::1
+2026-06-06T10:44:16.538Z [INFO]: Request: GET /.well-known/appspecific/com.chrome.devtools.json
+2026-06-06T10:45:22.223Z [INFO]: Request: GET /allocations/4
+2026-06-06T10:45:22.229Z [WARN]: Unauthorized API access attempt - IP: ::1
+2026-06-06T10:51:37.474Z [INFO]: Request: GET /.well-known/appspecific/com.chrome.devtools.json
+2026-06-06T11:13:23.758Z [INFO]: Request: GET /
+2026-06-06T11:13:23.812Z [INFO]: Request: GET /login
+2026-06-06T11:13:33.259Z [INFO]: Request: POST /login
+2026-06-06T11:13:33.482Z [INFO]: Request: GET /dashboard
+2026-06-06T11:13:39.649Z [INFO]: Request: GET /.well-known/appspecific/com.chrome.devtools.json
+2026-06-06T11:13:52.271Z [INFO]: Request: GET /dashboard
+2026-06-06T11:13:52.382Z [INFO]: Request: GET /.well-known/appspecific/com.chrome.devtools.json

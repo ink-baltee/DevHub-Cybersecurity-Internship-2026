@@ -25,6 +25,38 @@ const session = require("express-session");
 const consolidate = require("consolidate"); // Templating library adapter for Express
 const swig = require("swig");
 const helmet = require("helmet");
+
+const rateLimit = require("express-rate-limit");
+
+const cors = require("cors");
+
+// CORS configuration
+const corsOptions = {
+    origin: ["http://localhost:4000"],
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+    optionsSuccessStatus: 200
+};
+
+// Global rate limiter
+const globalLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // max 100 requests per 15 minutes
+    message: "Too many requests from this IP, please try again after 15 minutes.",
+    standardHeaders: true,
+    legacyHeaders: false,
+});
+
+// Strict rate limiter for login and signup
+const authLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 10, // max 10 requests per 15 minutes
+    message: "Too many authentication attempts, please try again after 15 minutes.",
+    standardHeaders: true,
+    legacyHeaders: false,
+});
+
 const MongoClient = require("mongodb").MongoClient; // Driver for connecting to MongoDB
 const http = require("http");
 const marked = require("marked");
@@ -87,7 +119,38 @@ MongoClient.connect(db, (err, db) => {
     //app.use(favicon(__dirname + "/app/assets/favicon.ico"));
     // Adding/ remove HTTP Headers for security
     // Fix for A5 - Security MisConfig - Helmet.js security headers
-    app.use(helmet());
+    app.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: ["'self'", "'unsafe-inline'"],
+            styleSrc: ["'self'", "'unsafe-inline'"],
+            imgSrc: ["'self'", "data:"],
+            connectSrc: ["'self'"],
+            fontSrc: ["'self'"],
+            objectSrc: ["'none'"],
+            upgradeInsecureRequests: [],
+        },
+    },
+    hsts: {
+        maxAge: 31536000,
+        includeSubDomains: true,
+        preload: true
+    }
+    }));
+    
+
+
+
+    // Apply global rate limiter to all routes
+    app.use(globalLimiter);
+    app.use(cors(corsOptions));
+
+    // Apply strict rate limiter to auth routes
+    app.use("/login", authLimiter);
+    app.use("/signup", authLimiter);
+
+
     app.use(helmet.frameguard({ action: "deny" }));
     app.use(helmet.noSniff());
     app.use(helmet.xssFilter());
@@ -203,6 +266,7 @@ MongoClient.connect(db, (err, db) => {
     logger.info("Application started");
     */
 
+    // Insecure HTTP connection
     // Insecure HTTP connection
     http.createServer(app).listen(port, () => {
         console.log(`Express http server listening on port ${port}`);

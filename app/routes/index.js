@@ -7,12 +7,14 @@ const MemosHandler = require("./memos");
 const ResearchHandler = require("./research");
 const tutorialRouter = require("./tutorial");
 const ErrorHandler = require("./error").errorHandler;
+const { apiKeyAuth } = require("../middleware/apiKeyAuth");
 
 const index = (app, db) => {
 
     "use strict";
 
     const sessionHandler = new SessionHandler(db);
+    const bruteforce = SessionHandler.bruteforce;    
     const profileHandler = new ProfileHandler(db);
     const benefitsHandler = new BenefitsHandler(db);
     const contributionsHandler = new ContributionsHandler(db);
@@ -31,8 +33,7 @@ const index = (app, db) => {
 
     // Login form
     app.get("/login", sessionHandler.displayLoginPage);
-    app.post("/login", sessionHandler.handleLoginRequest);
-
+    app.post("/login", bruteforce.prevent, sessionHandler.handleLoginRequest);
     // Signup form
     app.get("/signup", sessionHandler.displaySignupPage);
     app.post("/signup", sessionHandler.handleSignup);
@@ -60,7 +61,8 @@ const index = (app, db) => {
      */
 
     // Allocations Page
-    app.get("/allocations/:userId", isLoggedIn, allocationsHandler.displayAllocations);
+// Allocations Page
+    app.get("/allocations/:userId", isLoggedIn, apiKeyAuth, allocationsHandler.displayAllocations);
 
     // Memos Page
     app.get("/memos", isLoggedIn, memosHandler.displayMemos);
