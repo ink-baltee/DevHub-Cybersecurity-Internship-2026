@@ -34,6 +34,7 @@
   },
   "scripts": {
     "start": "node server.js",
+    "audit": "npm audit --audit-level=high",
     "dev": "cross-env PORT=5000 nodemon",
     "test:e2e": "cross-env NODE_ENV=test cypress open",
     "test:ci": "cross-env NODE_ENV=test cypress run",
